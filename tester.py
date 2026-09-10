@@ -6,12 +6,26 @@ prompt += "\n-----------------------------------------------------"
 prompt += "\n>>>"
 
 recipies = {}
+formatted_recipies = []
+
+recipie_name = recipies.keys()
+recipie_content = recipies.values()
 
 def add_recipie(name, content):
     recipies[name] = content
 
-def show_all_recipies():
-    pass
+def show_all_formatted_recipies():
+    """Display nice-formatted recipies"""
+    for name, recipie in recipies.items():
+        name.append()
+        recipie.append()
+
+    for index in range(len(formatted_recipies)):
+        if index % 2 == 0:
+            print(f"{recipie_name}: <15")
+
+        elif index % 2 == 1:
+            print(f"{recipie_content}")
 
 app_is_running = True
 
@@ -20,6 +34,9 @@ while app_is_running:
 
     user_input = user_input.lower()
     user_input = str(user_input)
+
+    if user_input == 'showAll':
+        show_all_formatted_recipies()
 
     if (user_input == 'end') or (user_input == 'exit'):
         print('>> Escaped program <<')
