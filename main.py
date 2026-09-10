@@ -7,9 +7,11 @@ prompt += "\n>>>"
 
 recipies = {}
 
-
 def add_recipie(name, content):
-    recipies[recipie_name] = recipie_content
+    recipies[name] = content
+
+def show_all_recipies():
+    pass
 
 app_is_running = True
 
@@ -24,8 +26,8 @@ while app_is_running:
         app_is_running = False
 
     elif (user_input != 'end') or (user_input != 'exit'):
-        recipie_name, recipie_content = user_input.split(':', maxsplit=1)
+        recipie_name, recipipe_content = user_input.split(':', maxsplit=1)
 
-        add_recipie(recipie_name, recipie_content)
+        add_recipie(recipie_name, recipipe_content)
 
-        print(f'\n> Saved <\n{recipie_name.capitalize()}:\n  {recipie_content}')
+        print(f'\n> Saved <\n{recipie_name.capitalize()}:\n  {recipipe_content}')
