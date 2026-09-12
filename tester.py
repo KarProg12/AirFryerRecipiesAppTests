@@ -43,41 +43,36 @@ def format_error_comunicate():
 
 # Main app loop
 while app_is_running:
-    user_input = input(prompt)
+    # .strip() deletes unnessesary spaces at the beginning and at the and
+    user_input = input(prompt).strip().lower()
 
-    user_input = user_input.lower()
-    user_input = str(user_input) 
+    # Check for program exitting command
+    if user_input == 'end()' or user_input == 'exit()':
+        is_command = True
+        print('\n---------------------\n>> Escaped program <<\n---------------------')
+        app_is_running = False
+        print(f"\n@| You've added {recipies_count} recipie/s |@")
+        continue
 
-    # Ignore white spaces
+    # Display all recipies in table
+    elif user_input == 'showall()':
+        is_command = True
+        show_all_formatted_recipies()
+        continue
+
+    # Check for white spaces
     if user_input == '':
         is_command = False
         print('\n!!! Nothing to add !!!')
         continue
 
-    # Check if user_input DOESN'T HAVE ":" but it IS A COMMAND
-    if ":" not in user_input and is_command == True:
-        continue
-
-    # Check if user_input DOESN'T HAVE ":" but it IS > NOT < A COMMAND
-    if ":" not in user_input and is_command == False:
+    # Check if format of recipie is good
+    if ":" not in user_input:
         format_error_comunicate()
         continue
 
-    # Recognise the recipies adding
-    else:
-        if (user_input != 'end()') or (user_input != 'exit()'):
-            recipie_name, recipipe_content = user_input.split(':', maxsplit=1)
-
-            add_recipie(recipie_name, recipipe_content)
-
-            print(f'\n> Saved <\n{recipie_name.capitalize()}:\n  {recipipe_content}')
-
-    if (user_input == 'end()') or (user_input == 'exit()'):
-        is_command = True
-        print('\n---------------------\n>> Escaped program <<\n---------------------')
-        app_is_running = False
-        print(f"\n@| You've added {recipies_count} recipie/s |@")
-
-    elif user_input == 'showAll()':
-        is_command = True
-        show_all_formatted_recipies()
+    # if everything's ok add recipie
+    # split user_input after ":"
+    recipie_name, recipipe_content = user_input.split(':', maxsplit=1)
+    add_recipie(recipie_name.strip(), recipipe_content.strip())
+    print(f'\n> Saved <\n{recipie_name.strip().capitalize()}:\n  {recipipe_content.strip()}')
