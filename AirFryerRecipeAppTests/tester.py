@@ -16,8 +16,6 @@ manual_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
 > Type ['/shall'] to display all recipes in table."""
 
-is_command = False
-
 def add_recipe(name, content):
     recipes[name] = content
 
@@ -52,25 +50,21 @@ while True:
 
     # Check for program exitting command
     if user_input.lower() == '/end' or user_input.lower() == '/exit':
-        is_command = True
         print('\n---------------------\n>> Escaped program <<\n---------------------')
         print(f"\n@| You've added {len(recipes)} recipe/s |@")
         break
 
     # Display all recipes in table
     elif user_input.lower() == '/shall':
-        is_command = True
         print_all_recipes_in_table()
         continue
 
     elif user_input.lower() == '/man':
-        is_command = True
         print_user_manual()
         continue
     
     # Check for white spaces
     if user_input == '':
-        is_command = False
         print('\n!!! Nothing to add !!!')
         continue
 
