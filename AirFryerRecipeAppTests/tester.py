@@ -47,40 +47,45 @@ def format_error():
 # Main app loop
 while True:
     # .strip() deletes unwanted spaces at the beginning and at the end
-    user_input = input(prompt).strip()
+    user_cmd = input(prompt).strip()
 
+    # ---COMMANDS-CHECKS---
     # Check for program exiting command
-    if user_input.lower() == '/end' or user_input.lower() == '/exit':
+    if user_cmd.lower() == '/end' or user_cmd.lower() == '/exit':
         print('\n---------------------\n>> Escaped program <<\n---------------------')
         print(f"\n@| You've added {len(recipes)} recipe/s |@")
         break
 
-    # Display all recipes in table
-    elif user_input.lower() == '/shall':
+    # Display all recipes in table (for now it is primitive)
+    elif user_cmd.lower() == '/shall':
         print_all_recipes_in_table()
         continue
 
-    elif user_input.lower() == '/man':
+    # Check for /man (user manual command)
+    elif user_cmd.lower() == '/man':
         print_user_manual()
         continue
     
+    # ---ERRORS-PREDICTING---
     # Check for white spaces
-    if user_input == '':
+    if user_cmd == '':
         nothing_to_add()
         continue
 
-    if ":" not in user_input:
+    # If ":" is not in user's input print error about incorrect recipe format
+    if ":" not in user_cmd:
         format_error()
         continue
 
     # if everything's ok add recipe
-    # split user_input after ":"
-    recipe_name, recipe_content = user_input.split(':', maxsplit=1)
+    # split user_cmd after ":"
+    recipe_name, recipe_content = user_cmd.split(':', maxsplit=1)
 
     # Check if user typed recipe without name or only recipe name without content and display communicate
     if not recipe_name.strip() or not recipe_content.strip():
         nothing_to_add()
         continue
 
+    # After all validations above if everything is ok add recipe to dict
     add_recipe(recipe_name.strip(), recipe_content.strip())
     print(f'\n> Saved <\n{recipe_name.strip().capitalize()}:\n  {recipe_content.strip()}')
