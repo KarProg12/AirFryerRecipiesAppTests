@@ -1,8 +1,6 @@
 import textwrap
 
 recipes = {}
-recipe_name = recipes.keys()
-recipe_content = recipes.values()
 
 prompt = f"""\n-----------------------------------------------------
 Enter the recipe in this order:
@@ -15,6 +13,9 @@ Type ['/man'] to show user manual.
 manual_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
 > Type ['/shall'] to display all recipes in table."""
+
+def nothing_to_add():
+    print("!!! Nothing to add !!!")
 
 def add_recipe(name, content):
     recipes[name] = content
@@ -65,7 +66,7 @@ while True:
     
     # Check for white spaces
     if user_input == '':
-        print('\n!!! Nothing to add !!!')
+        nothing_to_add()
         continue
 
     if ":" not in user_input:
@@ -75,5 +76,11 @@ while True:
     # if everything's ok add recipe
     # split user_input after ":"
     recipe_name, recipe_content = user_input.split(':', maxsplit=1)
+
+    # Check if user typed recipe without name or only recipe name without content and display communicate
+    if not recipe_name.strip() or not recipe_content.strip():
+        nothing_to_add()
+        continue
+
     add_recipe(recipe_name.strip(), recipe_content.strip())
     print(f'\n> Saved <\n{recipe_name.strip().capitalize()}:\n  {recipe_content.strip()}')
