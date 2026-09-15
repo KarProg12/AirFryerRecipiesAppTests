@@ -24,12 +24,12 @@ def add_recipe(name, content):
 def print_all_recipes_in_table():
     """Display table-formatted recipes"""
     if not recipes:
-        print("\n!!! There's no recipes !!!")
+        print("\n!!! There's no recipes yet !!!")
         return
     
     for name, recipe in recipes.items():
         formatted_recipe = recipe.replace(',', ',\n')
-        formatted_recipe = textwrap.indent(formatted_recipe, '   ')
+        formatted_recipe = textwrap.indent(formatted_recipe, '  ')
         print(f"\n{name.capitalize()}:\n"
               f"{formatted_recipe}\n--------------------------")
         
