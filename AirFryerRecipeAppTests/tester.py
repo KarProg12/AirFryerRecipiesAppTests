@@ -38,17 +38,17 @@ def print_user_manual():
 
 
 def format_error():
-    format_comunicate = """\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    format_communicate = """\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 !!! ERROR: Read the prompt above !!!"""
-    print(format_comunicate)
+    print(format_communicate)
     return
 
 # Main app loop
 while True:
-    # .strip() deletes unnessesary spaces at the beginning and at the and
+    # .strip() deletes unwanted spaces at the beginning and at the end
     user_input = input(prompt).strip()
 
-    # Check for program exitting command
+    # Check for program exiting command
     if user_input.lower() == '/end' or user_input.lower() == '/exit':
         print('\n---------------------\n>> Escaped program <<\n---------------------')
         print(f"\n@| You've added {len(recipes)} recipe/s |@")
@@ -74,6 +74,6 @@ while True:
 
     # if everything's ok add recipe
     # split user_input after ":"
-    recipe_name, recipipe_content = user_input.split(':', maxsplit=1)
-    add_recipe(recipe_name.strip(), recipipe_content.strip())
-    print(f'\n> Saved <\n{recipe_name.strip().capitalize()}:\n  {recipipe_content.strip()}')
+    recipe_name, recipe_content = user_input.split(':', maxsplit=1)
+    add_recipe(recipe_name.strip(), recipe_content.strip())
+    print(f'\n> Saved <\n{recipe_name.strip().capitalize()}:\n  {recipe_content.strip()}')
