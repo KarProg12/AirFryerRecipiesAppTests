@@ -14,12 +14,14 @@ Type ['/man'] to show user manual.
 commands = ['/help', '/shall', '/end', '/exit']
 
 def nothing_to_add() -> None:
-    print("!!! Nothing to add !!!")
+    print("\n!!! Nothing to add !!!")
 
 
 def add_recipe(name, content) -> None:
     recipes[name] = content
 
+def del_recipe(name_of_recipe):
+    name_of_recipe = recipes.pop(name_of_recipe, f"\n!!! There's no recipe named: {name_of_recipe}")
 
 # Print all recipes in table
 def print_all_recipes_in_table() -> None:
@@ -59,29 +61,26 @@ while True:
         print(f"\n@| You've added {len(recipes)} recipe/s |@")
         break
 
-
     # ---COMMANDS-CHECKS---
-    # Check for program exiting command
-    if user_cmd == '/end' or user_cmd == '/exit':
-        print('\n---------------------\n>> Escaped program <<\n---------------------')
-        print(f"\n@| You've added {len(recipes)} recipe/s |@")
-        break
+    match user_cmd:
+        case '/end' | '/exit':
+            print('\n---------------------\n>> Escaped program <<\n---------------------')
+            print(f"\n@| You've added {len(recipes)} recipe/s |@")
+            break
+        case '/help':
+            print_user_manual()
+            continue
+        case '/shall':
+            print_all_recipes_in_table()
+            continue
+        case '/delete' | '/del' | '/rm':
+            del_recipe(user_cmd)
 
-    # Display all recipes in table (for now it is primitive)
-    elif user_cmd == '/shall':
-        print_all_recipes_in_table()
-        continue
-
-    # Check for /man (user manual command)
-    elif user_cmd == '/man':
-        print_user_manual()
-        continue
-
-    # ---ERRORS-PREDICTING---
-    # Check for white spaces
-    if user_cmd == '':
-        nothing_to_add()
-        continue
+        # ---ERRORS-PREDICTING---
+        # Check for white spaces
+        case '':
+            nothing_to_add()
+            continue
 
     # If ":" is not in user's input print error about incorrect recipe format
     if ":" not in user_cmd:
