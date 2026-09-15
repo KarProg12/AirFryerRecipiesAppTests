@@ -10,10 +10,8 @@ Type ['/man'] to show user manual.
 [~! REMEMBER ABOUT CORRECT recipe FORMAT !~]
 \n>>>"""
 
-manual_menu = """
-> Type ['/end'] or ['/exit'] to escape the program.
-> Type ['/shall'] to display all recipes in table."""
-
+# List of app's commands
+commands = ['/help', '/shall', '/end', '/exit']
 
 def nothing_to_add() -> None:
     print("!!! Nothing to add !!!")
@@ -36,10 +34,12 @@ def print_all_recipes_in_table() -> None:
         print(f"\n{name.capitalize()}:\n"
               f"{formatted_recipe}\n--------------------------")
 
+user_help_menu = """
+> Type ['/end'] or ['/exit'] to escape the program.
+> Type ['/shall'] to display all recipes in table."""
 
 def print_user_manual() -> None:
-    print(manual_menu)
-
+    print(user_help_menu)
 
 def format_error() -> None:
     format_communicate = """\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -52,7 +52,7 @@ while True:
 
     try:
         # .strip() deletes unwanted spaces at the beginning and at the end
-        user_cmd = input(prompt).strip()
+        user_cmd = input(prompt).strip().lower()
     # If user's input is Ctrl + C or Ctr + D escape the program without any errors and print summary of recipes
     except(EOFError, KeyboardInterrupt):
         print('\n---------------------\n>> Escaped program <<\n---------------------')
@@ -62,18 +62,18 @@ while True:
 
     # ---COMMANDS-CHECKS---
     # Check for program exiting command
-    if user_cmd.lower() == '/end' or user_cmd.lower() == '/exit':
+    if user_cmd == '/end' or user_cmd == '/exit':
         print('\n---------------------\n>> Escaped program <<\n---------------------')
         print(f"\n@| You've added {len(recipes)} recipe/s |@")
         break
 
     # Display all recipes in table (for now it is primitive)
-    elif user_cmd.lower() == '/shall':
+    elif user_cmd == '/shall':
         print_all_recipes_in_table()
         continue
 
     # Check for /man (user manual command)
-    elif user_cmd.lower() == '/man':
+    elif user_cmd == '/man':
         print_user_manual()
         continue
 
