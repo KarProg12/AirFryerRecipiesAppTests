@@ -14,26 +14,29 @@ manual_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
 > Type ['/shall'] to display all recipes in table."""
 
+
 def nothing_to_add():
     print("!!! Nothing to add !!!")
+
 
 def add_recipe(name, content):
     recipes[name] = content
 
-# NOT WORKING 
+
+# Print all recipes in table
 def print_all_recipes_in_table():
     """Display table-formatted recipes"""
     if not recipes:
         print("\n!!! There's no recipes yet !!!")
         return
-    
+
     for name, recipe in recipes.items():
         formatted_recipe = recipe.replace(',', ',\n')
         formatted_recipe = textwrap.indent(formatted_recipe, '  ')
         print(f"\n{name.capitalize()}:\n"
               f"{formatted_recipe}\n--------------------------")
-        
- 
+
+
 def print_user_manual():
     print(manual_menu)
 
@@ -44,10 +47,19 @@ def format_error():
     print(format_communicate)
     return
 
+
 # Main app loop
 while True:
-    # .strip() deletes unwanted spaces at the beginning and at the end
-    user_cmd = input(prompt).strip()
+
+    try:
+        # .strip() deletes unwanted spaces at the beginning and at the end
+        user_cmd = input(prompt).strip()
+    # If user's input is Ctrl + C or Ctr + D escape the program without any errors and print summary of recipes
+    except(EOFError, KeyboardInterrupt):
+        print('\n---------------------\n>> Escaped program <<\n---------------------')
+        print(f"\n@| You've added {len(recipes)} recipe/s |@")
+        break
+
 
     # ---COMMANDS-CHECKS---
     # Check for program exiting command
@@ -65,7 +77,7 @@ while True:
     elif user_cmd.lower() == '/man':
         print_user_manual()
         continue
-    
+
     # ---ERRORS-PREDICTING---
     # Check for white spaces
     if user_cmd == '':
