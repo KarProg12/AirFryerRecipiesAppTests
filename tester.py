@@ -1,11 +1,6 @@
 import textwrap
 
-<<<<<<< HEAD
-recipies = {}
-recipies_table = []
-=======
 recipes = {}
->>>>>>> ea61f6cc8ce35a710465643cc289e41ec668a8d0
 
 prompt = f"""\n-----------------------------------------------------
 Enter the recipe in this order:
@@ -15,28 +10,14 @@ Type ['/help'] to show available commands.
 [~! REMEMBER ABOUT CORRECT recipe FORMAT !~]
 \n>>> """
 
-<<<<<<< HEAD
-def show_recipies_in_table():
-    """Display nice-formatted recipies"""
-    list_index = len(recipies_table)
-
-    for name, recipie in recipies.items():
-        name.append()
-        recipie.append()
-
-    for index in range(list_index):
-        if index % 2 == 0:
-            print(f"{recipie_name}: <15")
-=======
 def nothing_to_add() -> None:
     print("\n!!! Nothing to add !!!")
 
->>>>>>> ea61f6cc8ce35a710465643cc289e41ec668a8d0
 
 def add_recipe(name, content) -> None:
     recipes[name] = content
 
-def del_recipe(recipe_name_to_del) -> None:
+def del_recipe(name_of_recipe) -> None:
     """Deletes the recipe by name"""
     # Check if there are no recipes yet
     if not recipes:
@@ -44,30 +25,24 @@ def del_recipe(recipe_name_to_del) -> None:
         return
 
     # Pass the user input to the function's argument
-    recipe_name_to_del = input("\n>>>  Enter recipe name to delete\n>>> ").strip().lower()
+    name_of_recipe = input("\n>>>  Enter recipe name to delete\n>>> ").strip().lower()
 
     # Save the popped recipe do variable to display later
-    deleted_recipe = recipes.pop(recipe_name_to_del, None)
+    deleted_recipe = recipes.pop(name_of_recipe, None)
 
     # Check for default value from .pop()
     if deleted_recipe is not None:
-        print(f"\n> Successfully removed: {recipe_name_to_del.capitalize()} <")
+        print(f"\n> Successfully removed: {name_of_recipe.capitalize()} <")
 
     else:
-        print(f"\n!!! Error 404: Not found: {recipe_name_to_del.capitalize()} !!!")
+        print(f"\n!!! Error 404: Not found: {name_of_recipe.capitalize()} !!!")
 
-<<<<<<< HEAD
-
-while app_is_running:
-    user_input = input(prompt)
-=======
 # Print all recipes in table
 def print_all_recipes_in_table() -> None:
     """Display table-formatted recipes"""
     if not recipes:
         print("\n!!! There's no recipes yet !!!")
         return
->>>>>>> ea61f6cc8ce35a710465643cc289e41ec668a8d0
 
     for name, recipe in recipes.items():
         formatted_recipe = recipe.replace(',', ',\n')
@@ -75,14 +50,6 @@ def print_all_recipes_in_table() -> None:
         print(f"\n{name.capitalize()}:\n"
               f"{formatted_recipe}\n--------------------------")
 
-<<<<<<< HEAD
-    if user_input == 'showInTable':
-        show_recipies_in_table()
-
-    elif (user_input == 'end') or (user_input == 'exit'):
-        print('>> Escaped program <<')
-        app_is_running = False
-=======
 user_help_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
 > Type ['/shall'] to display all recipes in table.
@@ -92,7 +59,6 @@ user_help_menu = """
 
 def print_user_manual() -> None:
     print(user_help_menu)
->>>>>>> ea61f6cc8ce35a710465643cc289e41ec668a8d0
 
 def format_error() -> None:
     format_communicate = """\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
