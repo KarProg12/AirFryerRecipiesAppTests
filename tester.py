@@ -13,11 +13,10 @@ Type ['/help'] to show available commands.
 def nothing_to_add() -> None:
     print("\n!!! Nothing to add !!!")
 
-
 def add_recipe(name, content) -> None:
     recipes[name] = content
 
-def del_recipe(recipe_name_to_del) -> None:
+def del_recipe() -> None:
     """Deletes the recipe by name"""
     # Check if there are no recipes yet
     if not recipes:
@@ -36,6 +35,9 @@ def del_recipe(recipe_name_to_del) -> None:
 
     else:
         print(f"\n!!! Error 404: Not found: {recipe_name_to_del.capitalize()} !!!")
+
+def search_recipe() -> None:
+    pass
 
 # Print all recipes in table
 def print_all_recipes_in_table() -> None:
@@ -91,7 +93,7 @@ while True:
             print_all_recipes_in_table()
             continue
         case '/delete' | '/del' | '/rm':
-            del_recipe(user_cmd)
+            del_recipe()
             continue
 
         # ---ERRORS-PREDICTING---
