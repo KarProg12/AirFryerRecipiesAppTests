@@ -10,13 +10,10 @@ recipes = {}
 prompt = f"""\n-----------------------------------------------------
 Enter the recipe in this order:
   'KEY: recipe_name' : 'VALUE: recipe_content'
-Type ['/man'] to show user manual.
+Type ['/help'] to show available commands.
 -----------------------------------------------------
 [~! REMEMBER ABOUT CORRECT recipe FORMAT !~]
-\n>>>"""
-
-# List of app's commands
-commands = ['/help', '/shall', '/end', '/exit']
+\n>>> """
 
 <<<<<<< HEAD
 def show_recipies_in_table():
@@ -32,13 +29,32 @@ def show_recipies_in_table():
             print(f"{recipie_name}: <15")
 =======
 def nothing_to_add() -> None:
-    print("!!! Nothing to add !!!")
+    print("\n!!! Nothing to add !!!")
 
 >>>>>>> ea61f6cc8ce35a710465643cc289e41ec668a8d0
 
 def add_recipe(name, content) -> None:
     recipes[name] = content
 
+def del_recipe(recipe_name_to_del) -> None:
+    """Deletes the recipe by name"""
+    # Check if there are no recipes yet
+    if not recipes:
+        print("\n!!! There's no recipes yet !!!")
+        return
+
+    # Pass the user input to the function's argument
+    recipe_name_to_del = input("\n>>>  Enter recipe name to delete\n>>> ").strip().lower()
+
+    # Save the popped recipe do variable to display later
+    deleted_recipe = recipes.pop(recipe_name_to_del, None)
+
+    # Check for default value from .pop()
+    if deleted_recipe is not None:
+        print(f"\n> Successfully removed: {recipe_name_to_del.capitalize()} <")
+
+    else:
+        print(f"\n!!! Error 404: Not found: {recipe_name_to_del.capitalize()} !!!")
 
 <<<<<<< HEAD
 
@@ -69,7 +85,10 @@ def print_all_recipes_in_table() -> None:
 =======
 user_help_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
-> Type ['/shall'] to display all recipes in table."""
+> Type ['/shall'] to display all recipes in table.
+> Type ['/del'], ['/delete'] or ['/rm'] 
+   to enter the deleting by name mode 
+   (SUGGESTION: first type ['/shall'] to show what's the name of the recipe)."""
 
 def print_user_manual() -> None:
     print(user_help_menu)
@@ -93,29 +112,27 @@ while True:
         print(f"\n@| You've added {len(recipes)} recipe/s |@")
         break
 
-
     # ---COMMANDS-CHECKS---
-    # Check for program exiting command
-    if user_cmd == '/end' or user_cmd == '/exit':
-        print('\n---------------------\n>> Escaped program <<\n---------------------')
-        print(f"\n@| You've added {len(recipes)} recipe/s |@")
-        break
+    match user_cmd:
+        case '/end' | '/exit':
+            print('\n---------------------\n>> Escaped program <<\n---------------------')
+            print(f"\n@| You've added {len(recipes)} recipe/s |@")
+            break
+        case '/help':
+            print_user_manual()
+            continue
+        case '/shall':
+            print_all_recipes_in_table()
+            continue
+        case '/delete' | '/del' | '/rm':
+            del_recipe(user_cmd)
+            continue
 
-    # Display all recipes in table (for now it is primitive)
-    elif user_cmd == '/shall':
-        print_all_recipes_in_table()
-        continue
-
-    # Check for /man (user manual command)
-    elif user_cmd == '/man':
-        print_user_manual()
-        continue
-
-    # ---ERRORS-PREDICTING---
-    # Check for white spaces
-    if user_cmd == '':
-        nothing_to_add()
-        continue
+        # ---ERRORS-PREDICTING---
+        # Check for white spaces
+        case '':
+            nothing_to_add()
+            continue
 
     # If ":" is not in user's input print error about incorrect recipe format
     if ":" not in user_cmd:
