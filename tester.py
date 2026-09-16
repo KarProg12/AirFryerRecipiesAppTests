@@ -5,13 +5,10 @@ recipes = {}
 prompt = f"""\n-----------------------------------------------------
 Enter the recipe in this order:
   'KEY: recipe_name' : 'VALUE: recipe_content'
-Type ['/man'] to show user manual.
+Type ['/help'] to show available commands.
 -----------------------------------------------------
 [~! REMEMBER ABOUT CORRECT recipe FORMAT !~]
-\n>>>"""
-
-# List of app's commands
-commands = ['/help', '/shall', '/end', '/exit']
+\n>>> """
 
 def nothing_to_add() -> None:
     print("\n!!! Nothing to add !!!")
@@ -20,8 +17,25 @@ def nothing_to_add() -> None:
 def add_recipe(name, content) -> None:
     recipes[name] = content
 
-def del_recipe(name_of_recipe):
-    name_of_recipe = recipes.pop(name_of_recipe, f"\n!!! There's no recipe named: {name_of_recipe}")
+def del_recipe(recipe_name_to_del) -> None:
+    """Deletes the recipe by name"""
+    # Check if there are no recipes yet
+    if not recipes:
+        print("\n!!! There's no recipes yet !!!")
+        return
+
+    # Pass the user input to the function's argument
+    recipe_name_to_del = input("\n>>>  Enter recipe name to delete\n>>> ").strip().lower()
+
+    # Save the popped recipe do variable to display later
+    deleted_recipe = recipes.pop(recipe_name_to_del, None)
+
+    # Check for default value from .pop()
+    if deleted_recipe is not None:
+        print(f"\n> Successfully removed: {recipe_name_to_del.capitalize()} <")
+
+    else:
+        print(f"\n!!! Error 404: Not found: {recipe_name_to_del.capitalize()} !!!")
 
 # Print all recipes in table
 def print_all_recipes_in_table() -> None:
@@ -38,7 +52,10 @@ def print_all_recipes_in_table() -> None:
 
 user_help_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
-> Type ['/shall'] to display all recipes in table."""
+> Type ['/shall'] to display all recipes in table.
+> Type ['/del'], ['/delete'] or ['/rm'] 
+   to enter the deleting by name mode 
+   (SUGGESTION: first type ['/shall'] to show what's the name of the recipe)."""
 
 def print_user_manual() -> None:
     print(user_help_menu)
@@ -75,6 +92,7 @@ while True:
             continue
         case '/delete' | '/del' | '/rm':
             del_recipe(user_cmd)
+            continue
 
         # ---ERRORS-PREDICTING---
         # Check for white spaces
