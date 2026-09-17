@@ -36,11 +36,7 @@ def add_recipe(name, content) -> None:
     """Func for adding recipes"""
     recipes[name] = content
 
-<<<<<<< HEAD
-def del_recipe(name_of_recipe) -> None:
-=======
 def del_recipe() -> None:
->>>>>>> f91d3443a995c9a830ddde5ca0c8799290222636
     """Deletes the recipe by name"""
     # Check if there are no recipes yet
     if not recipes:
