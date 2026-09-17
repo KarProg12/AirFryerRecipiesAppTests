@@ -36,25 +36,31 @@ def add_recipe(name, content) -> None:
     """Func for adding recipes"""
     recipes[name.strip().lower()] = content
 
+
 def del_recipe() -> None:
     """Deletes the recipe by name"""
-    # Check if there are no recipes yet
     if not recipes:
         print("\n!!! There's no recipes yet !!!")
         return
 
-    # Pass the user input to the function's argument
     name_of_recipe = input("\n>>> Enter recipe name to delete\n>>> ").strip().lower()
 
-    # Save the popped recipe do variable to display later
     deleted_recipe = recipes.pop(name_of_recipe, None)
 
-    # Check for default value from .pop()
+    # If match is equal to user input delete recipe
     if deleted_recipe is not None:
         print(f"\n> Successfully removed: {name_of_recipe.capitalize()} <")
+        return
 
-    else:
-        print(f"\n!!! Error 404: Not found: {name_of_recipe.capitalize()} !!!")
+    # If there was no accurate input then check for typos and ask user
+    matches = difflib.get_close_matches(name_of_recipe, recipes.keys(), cutoff=0.5)
+
+    print(f"\n!!! Error 404: Not found: {name_of_recipe.capitalize()} !!!")
+
+    if matches:
+        print("\n??? Did you mean:")
+        for match in matches:
+            print(f"  > {match.capitalize()}")
 
 def search_recipe() -> None:
     """Searches precisely recipe by its name"""
@@ -64,7 +70,7 @@ def search_recipe() -> None:
         return
 
     # Store the input in search_query variable
-    search_query = input("\n>>> Enter the recipe name to search (allows typos)\n>>> ")
+    search_query = input("\n>>> Enter the recipe name to search (allows typos)\n>>> ").strip().lower()
 
     # matches = close matches to search_query(input) searching in the names(keys)
     # of recipes with precision 0.5 (min = 0, max = 1)
@@ -76,9 +82,8 @@ def search_recipe() -> None:
         # Display close formatted matches
         for match in matches:
             print(f"\n> {match.capitalize()}:\n  {recipes[match]}")
-    # If there's no matches
     else:
-        print(f"\n!!! No close matches for {search_query.capitalize()} found !!!")
+        print(f"\n!!! Error 404: Not found: {search_query} !!!")
 
 # Print all recipes in table
 def print_all_recipes_in_table() -> None:
