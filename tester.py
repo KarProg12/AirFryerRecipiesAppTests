@@ -7,6 +7,7 @@ prompt = f"""\n-----------------------------------------------------
 Enter the recipe in this order:
   'KEY: recipe_name' : 'VALUE: recipe_content'
 Type ['/help'] to show available commands.
+You can also search in recipes.
 -----------------------------------------------------
 [~! REMEMBER ABOUT CORRECT recipe FORMAT !~]
 \n>>> """
@@ -25,8 +26,7 @@ user_help_menu = """
 > Type ['/shall'] to display all recipes in table.
 > Type ['/find'] or [/'search'] to search the recipe (with close matches and allowing typos)
 > Type ['/del'], ['/delete'] or ['/rm'] 
-   to enter the deleting by name mode 
-   (SUGGESTION: first type ['/shall'] to show what's the name of the recipe)."""
+   to enter the deleting by name mode."""
 
 def print_user_manual() -> None:
     """Func for displaying user manual"""
@@ -34,7 +34,7 @@ def print_user_manual() -> None:
 
 def add_recipe(name, content) -> None:
     """Func for adding recipes"""
-    recipes[name] = content
+    recipes[name.strip().lower()] = content
 
 def del_recipe() -> None:
     """Deletes the recipe by name"""
@@ -44,7 +44,7 @@ def del_recipe() -> None:
         return
 
     # Pass the user input to the function's argument
-    name_of_recipe = input("\n>>>  Enter recipe name to delete\n>>> ").strip().lower()
+    name_of_recipe = input("\n>>> Enter recipe name to delete\n>>> ").strip().lower()
 
     # Save the popped recipe do variable to display later
     deleted_recipe = recipes.pop(name_of_recipe, None)
@@ -100,7 +100,7 @@ while True:
 
     try:
         # .strip() deletes unwanted spaces at the beginning and at the end
-        user_cmd = input(prompt).strip().lower()
+        user_cmd = input(prompt).strip()
     # If user's input is Ctrl + C or Ctr + D escape the program without any errors and print summary of recipes
     except(EOFError, KeyboardInterrupt):
         print('\n---------------------\n>> Escaped program <<\n---------------------')
@@ -108,7 +108,7 @@ while True:
         break
 
     # ---COMMANDS-CHECKS---
-    match user_cmd:
+    match user_cmd.lower():
         case '/end' | '/exit':
             print('\n---------------------\n>> Escaped program <<\n---------------------')
             print(f"\n@| You've added {len(recipes)} recipe/s |@")
@@ -148,4 +148,4 @@ while True:
 
     # After all validations above if everything is ok add recipe to dict
     add_recipe(recipe_name.strip(), recipe_content.strip())
-    print(f'\n> Saved <\n{recipe_name.strip().capitalize()}:\n  {recipe_content.strip()}')
+    print(f'\n> Saved <\n{recipe_name.strip().capitalize()}:\n  {recipe_content}')
