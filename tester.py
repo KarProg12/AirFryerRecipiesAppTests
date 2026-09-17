@@ -1,4 +1,5 @@
 import textwrap
+import difflib
 
 recipes = {}
 
@@ -11,13 +12,35 @@ Type ['/help'] to show available commands.
 \n>>> """
 
 def nothing_to_add() -> None:
+    """Func that displays communicate 'Nothing to add'"""
     print("\n!!! Nothing to add !!!")
 
+def format_error() -> None:
+    format_communicate = """\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+!!! ERROR: Read the prompt above !!!"""
+    print(format_communicate)
+
+user_help_menu = """
+> Type ['/end'] or ['/exit'] to escape the program.
+> Type ['/shall'] to display all recipes in table.
+> Type ['/find'] or [/'search'] to search the recipe (with close matches and allowing typos)
+> Type ['/del'], ['/delete'] or ['/rm'] 
+   to enter the deleting by name mode 
+   (SUGGESTION: first type ['/shall'] to show what's the name of the recipe)."""
+
+def print_user_manual() -> None:
+    """Func for displaying user manual"""
+    print(user_help_menu)
 
 def add_recipe(name, content) -> None:
+    """Func for adding recipes"""
     recipes[name] = content
 
+<<<<<<< HEAD
 def del_recipe(name_of_recipe) -> None:
+=======
+def del_recipe() -> None:
+>>>>>>> f91d3443a995c9a830ddde5ca0c8799290222636
     """Deletes the recipe by name"""
     # Check if there are no recipes yet
     if not recipes:
@@ -37,6 +60,30 @@ def del_recipe(name_of_recipe) -> None:
     else:
         print(f"\n!!! Error 404: Not found: {name_of_recipe.capitalize()} !!!")
 
+def search_recipe() -> None:
+    """Searches precisely recipe by its name"""
+    # Check if there's no recipes
+    if not recipes:
+        print("\n!!! There's no recipes yet !!!")
+        return
+
+    # Store the input in search_query variable
+    search_query = input("\n>>> Enter the recipe name to search (allows typos)\n>>> ")
+
+    # matches = close matches to search_query(input) searching in the names(keys)
+    # of recipes with precision 0.5 (min = 0, max = 1)
+    matches = difflib.get_close_matches(search_query, recipes.keys(), cutoff=0.5)
+
+    # If there are matches
+    if matches:
+        print("\n??? Did you mean:")
+        # Display close formatted matches
+        for match in matches:
+            print(f"\n> {match.capitalize()}:\n  {recipes[match]}")
+    # If there's no matches
+    else:
+        print(f"\n!!! No close matches for {search_query.capitalize()} found !!!")
+
 # Print all recipes in table
 def print_all_recipes_in_table() -> None:
     """Display table-formatted recipes"""
@@ -50,23 +97,9 @@ def print_all_recipes_in_table() -> None:
         print(f"\n{name.capitalize()}:\n"
               f"{formatted_recipe}\n--------------------------")
 
-user_help_menu = """
-> Type ['/end'] or ['/exit'] to escape the program.
-> Type ['/shall'] to display all recipes in table.
-> Type ['/del'], ['/delete'] or ['/rm'] 
-   to enter the deleting by name mode 
-   (SUGGESTION: first type ['/shall'] to show what's the name of the recipe)."""
-
-def print_user_manual() -> None:
-    print(user_help_menu)
-
-def format_error() -> None:
-    format_communicate = """\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-!!! ERROR: Read the prompt above !!!"""
-    print(format_communicate)
 
 
-# Main app loop
+# ---MAIN-APP-LOOP---
 while True:
 
     try:
@@ -90,8 +123,11 @@ while True:
         case '/shall':
             print_all_recipes_in_table()
             continue
+        case '/search' | '/find':
+            search_recipe()
+            continue
         case '/delete' | '/del' | '/rm':
-            del_recipe(user_cmd)
+            del_recipe()
             continue
 
         # ---ERRORS-PREDICTING---
