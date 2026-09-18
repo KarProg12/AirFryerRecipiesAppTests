@@ -7,7 +7,7 @@ prompt = f"""\n-----------------------------------------------------
 Enter the recipe in this order:
   'KEY: recipe_name' : 'VALUE: recipe_content'
 Type ['/help'] to show available commands.
-You can also search in recipes.
+You can also search in recipes or in recipes ingredients.
 -----------------------------------------------------
 [~! REMEMBER ABOUT CORRECT recipe FORMAT !~]
 \n>>> """
@@ -16,7 +16,10 @@ def nothing_to_add() -> None:
     """Func that displays communicate 'Nothing to add'"""
     print("\n!!! Nothing to add !!!")
 
-def format_error() -> None:
+def no_recipes() -> None:
+    print("\n!!! There's no recipes yet !!!")
+
+def print_format_error() -> None:
     format_communicate = """\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 !!! ERROR: Read the prompt above !!!"""
     print(format_communicate)
@@ -24,7 +27,8 @@ def format_error() -> None:
 user_help_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
 > Type ['/shall'] to display all recipes in table.
-> Type ['/find'] or [/'search'] to search the recipe (with close matches and allowing typos)
+> Type ['/nameSearch'] to search the recipe by its name 
+> Type ['/ingrSearch'] to search in the recipes by ingredients
 > Type ['/del'], ['/delete'] or ['/rm'] 
    to enter the deleting by name mode."""
 
@@ -40,7 +44,7 @@ def add_recipe(name, content) -> None:
 def del_recipe() -> None:
     """Deletes the recipe by name"""
     if not recipes:
-        print("\n!!! There's no recipes yet !!!")
+        no_recipes()
         return
 
     name_of_recipe = input("\n>>> Enter recipe name to delete\n>>> ").strip().lower()
@@ -58,15 +62,15 @@ def del_recipe() -> None:
     print(f"\n!!! Error 404: Not found: {name_of_recipe.capitalize()} !!!")
 
     if matches:
-        print("\n??? Did you mean:")
+        print("\n??? Did you mean:\n=================")
         for match in matches:
             print(f"  > {match.capitalize()}")
 
-def search_recipe() -> None:
+def search_by_name() -> None:
     """Searches precisely recipe by its name"""
     # Check if there's no recipes
     if not recipes:
-        print("\n!!! There's no recipes yet !!!")
+        no_recipes()
         return
 
     # Store the input in search_query variable
@@ -78,10 +82,26 @@ def search_recipe() -> None:
 
     # If there are matches
     if matches:
-        print("\n??? Did you mean:")
+        print("\n??? Did you mean:\n=================")
         # Display close formatted matches
         for match in matches:
             print(f"\n> {match.capitalize()}:\n  {recipes[match]}")
+    else:
+        print(f"\n!!! Error 404: Not found: {search_query} !!!")
+
+def search_by_ingredient() -> None:
+    if not recipes:
+        no_recipes()
+        return
+
+    search_query = input("\n>>> Enter the recipe's ingredient you want to search (allows typos)\n>>> ").strip().lower()
+
+    matches = difflib.get_close_matches(search_query, recipes.values(), cutoff=0.5)
+
+    if matches:
+        print("\n??? Did you mean:\n=================")
+        for match in matches:
+            print(f"\n> {match}")
     else:
         print(f"\n!!! Error 404: Not found: {search_query} !!!")
 
@@ -89,7 +109,7 @@ def search_recipe() -> None:
 def print_all_recipes_in_table() -> None:
     """Display table-formatted recipes"""
     if not recipes:
-        print("\n!!! There's no recipes yet !!!")
+        no_recipes()
         return
 
     for name, recipe in recipes.items():
@@ -112,7 +132,7 @@ while True:
         print(f"\n@| You've added {len(recipes)} recipe/s |@")
         break
 
-    # ---COMMANDS-CHECKS---
+    # ---COMMANDS---
     match user_cmd.lower():
         case '/end' | '/exit':
             print('\n---------------------\n>> Escaped program <<\n---------------------')
@@ -124,8 +144,11 @@ while True:
         case '/shall':
             print_all_recipes_in_table()
             continue
-        case '/search' | '/find':
-            search_recipe()
+        case '/namesearch':
+            search_by_name()
+            continue
+        case '/ingrsearch':
+            search_by_ingredient()
             continue
         case '/delete' | '/del' | '/rm':
             del_recipe()
@@ -139,7 +162,7 @@ while True:
 
     # If ":" is not in user's input print error about incorrect recipe format
     if ":" not in user_cmd:
-        format_error()
+        print_format_error()
         continue
 
     # if everything's ok add recipe
