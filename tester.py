@@ -27,8 +27,8 @@ def print_format_error() -> None:
 user_help_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
 > Type ['/shall'] to display all recipes in table.
-> Type ['/nameSearch'] to search the recipe by its name. 
-> Type ['/ingrSearch'] to search in the recipes by ingredients.
+> Type ['/nameSearch'] to search the recipe by its name 
+> Type ['/ingrSearch'] to search in the recipes by ingredients
 > Type ['/del'], ['/delete'] or ['/rm'] 
     to enter the deleting by name mode."""
 
@@ -67,6 +67,10 @@ def del_recipe() -> None:
             recipes.pop(matches[0])
             print(f"\n> Successfully removed: {matches[0].capitalize()} <")
 
+        print("\n??? Did you mean:\n=================")
+        for match in matches:
+            print(f"  > {match.capitalize()}")
+
 def search_by_name() -> None:
     """Searches precisely recipe by its name"""
     # Check if there's no recipes
@@ -96,16 +100,14 @@ def search_by_ingredient() -> None:
         return
 
     search_query = input("\n>>> Enter the recipe's ingredient you want to search (allows typos)\n>>> ").strip().lower()
-    found = False
 
-    print("\n??? Did you mean:\n=================")
-    for name, content in recipes.items():
-        words = [word.strip(".,;:!?") for word in content.lower().split()]
-        if search_query in content.lower() or difflib.get_close_matches(search_query, words, cutoff=0.6):
-            print(f"\n> {name.capitalize()}:\n  {content}")
-            found = True
+    matches = difflib.get_close_matches(search_query, recipes.values(), cutoff=0.5)
 
-    if not found:
+    if matches:
+        print("\n??? Did you mean:\n=================")
+        for match in matches:
+            print(f"\n> {match}")
+    else:
         print(f"\n!!! Error 404: Not found: {search_query} !!!")
 
 # Print all recipes in table
