@@ -27,10 +27,10 @@ def print_format_error() -> None:
 user_help_menu = """
 > Type ['/end'] or ['/exit'] to escape the program.
 > Type ['/shall'] to display all recipes in table.
-> Type ['/nameSearch'] to search the recipe by its name 
-> Type ['/ingrSearch'] to search in the recipes by ingredients
+> Type ['/nameSearch'] to search the recipe by its name. 
+> Type ['/ingrSearch'] to search in the recipes by ingredients.
 > Type ['/del'], ['/delete'] or ['/rm'] 
-   to enter the deleting by name mode."""
+    to enter the deleting by name mode."""
 
 def print_user_manual() -> None:
     """Func for displaying user manual"""
@@ -39,7 +39,6 @@ def print_user_manual() -> None:
 def add_recipe(name, content) -> None:
     """Func for adding recipes"""
     recipes[name.strip().lower()] = content
-
 
 def del_recipe() -> None:
     """Deletes the recipe by name"""
@@ -57,14 +56,16 @@ def del_recipe() -> None:
         return
 
     # If there was no accurate input then check for typos and ask user
-    matches = difflib.get_close_matches(name_of_recipe, recipes.keys(), cutoff=0.5)
+    matches = difflib.get_close_matches(name_of_recipe, recipes.keys(), cutoff=0.6)
 
     print(f"\n!!! Error 404: Not found: {name_of_recipe.capitalize()} !!!")
 
     if matches:
-        print("\n??? Did you mean:\n=================")
-        for match in matches:
-            print(f"  > {match.capitalize()}")
+        confirm = input(f"\n??? Did you mean {matches[0].capitalize()}? [y/N]\n>>> ").strip().lower()
+        # If user confirms delete the recipe
+        if confirm in ['y', 'yes']:
+            recipes.pop(matches[0])
+            print(f"\n> Successfully removed: {matches[0].capitalize()} <")
 
 def search_by_name() -> None:
     """Searches precisely recipe by its name"""
@@ -77,8 +78,8 @@ def search_by_name() -> None:
     search_query = input("\n>>> Enter the recipe name to search (allows typos)\n>>> ").strip().lower()
 
     # matches = close matches to search_query(input) searching in the names(keys)
-    # of recipes with precision 0.5 (min = 0, max = 1)
-    matches = difflib.get_close_matches(search_query, recipes.keys(), cutoff=0.5)
+    # of recipes cutoff (max tolerance for typos = 0, no tolerance for typos 1)
+    matches = difflib.get_close_matches(search_query, recipes.keys(), cutoff=0.6)
 
     # If there are matches
     if matches:
@@ -95,28 +96,51 @@ def search_by_ingredient() -> None:
         return
 
     search_query = input("\n>>> Enter the recipe's ingredient you want to search (allows typos)\n>>> ").strip().lower()
+    found = False
 
-    matches = difflib.get_close_matches(search_query, recipes.values(), cutoff=0.5)
+    print("\n??? Did you mean:\n=================")
+    for name, content in recipes.items():
+        words = [word.strip(".,;:!?") for word in content.lower().split()]
+        if search_query in content.lower() or difflib.get_close_matches(search_query, words, cutoff=0.6):
+            print(f"\n> {name.capitalize()}:\n  {content}")
+            found = True
 
-    if matches:
-        print("\n??? Did you mean:\n=================")
-        for match in matches:
-            print(f"\n> {match}")
-    else:
+    if not found:
         print(f"\n!!! Error 404: Not found: {search_query} !!!")
 
 # Print all recipes in table
 def print_all_recipes_in_table() -> None:
-    """Display table-formatted recipes"""
+    """Display nice table-formatted recipes"""
     if not recipes:
         no_recipes()
         return
 
+    # Widths of columns for name and content of the recipes
+    col_name_width = 20
+    col_content_width = 40
+
+    # Top table frame
+    print(f"\n┌{'─' * col_name_width}┬{'─' * col_content_width}┐")
+    print(f"│ {'Recipe Name':<{col_name_width - 1}}│ {'Ingredients / Content':<{col_content_width - 1}}│")
+    print(f"├{'─' * col_name_width}┼{'─' * col_content_width}┤")
+
     for name, recipe in recipes.items():
-        formatted_recipe = recipe.replace(',', ',\n')
-        formatted_recipe = textwrap.indent(formatted_recipe, '  ')
-        print(f"\n{name.capitalize()}:\n"
-              f"{formatted_recipe}\n--------------------------")
+        # Divide long recipe on the list to avoid table's bad formatting
+        wrapped_content = textwrap.wrap(recipe, width=col_content_width - 2)
+
+        # First line with recipe name
+        first_line = wrapped_content[0] if wrapped_content else ""
+        print(f"│ {name.capitalize():<{col_name_width - 1}}│ {first_line:<{col_content_width - 1}}│")
+
+        # Next lines of the recipe (if the text was too long, and it has been wrapped)
+        for line in wrapped_content[1:]:
+            print(f"│ {'':<{col_name_width - 1}}│ {line:<{col_content_width - 1}}│")
+
+        print(f"├{'─' * col_name_width}┼{'─' * col_content_width}┤")
+
+    # Deleting the last separating line and closing the bottom of the table
+    # (The loop above prints a line after each recipe so overwrite the last one with a bottom border)
+    print(f"└{'─' * col_name_width}┴{'─' * col_content_width}┘")
 
 
 
