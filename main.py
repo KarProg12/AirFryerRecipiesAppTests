@@ -2,7 +2,7 @@
 import app_funcs
 
 
-PROMPT = f"""\n---------------------------------------------------------
+prompt = f"""\n---------------------------------------------------------
 Enter the recipe in this order:
   'KEY: recipe_name' : 'VALUE: recipe_content'
 Type ['/help'] to show available commands.
@@ -20,7 +20,7 @@ while True:
 
     try:
         # .strip() deletes unwanted spaces at the beginning and at the end
-        user_cmd = input(PROMPT).strip()
+        user_cmd = input(prompt).strip()
     # If user's input is Ctrl + C or Ctr + D escape the program without any errors and print summary of recipes
     except(EOFError, KeyboardInterrupt):
         print('\n---------------------\n>> Escaped program <<\n---------------------')
