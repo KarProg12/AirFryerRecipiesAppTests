@@ -3,12 +3,12 @@ import textwrap
 import difflib
 
 # ---FUNCTIONS-&-VARIABLES---
-def greeting():
+def greet_user():
     print("\n$$$ WELCOME TO THE AIR FRYER RECIPE APP $$$")
 
 recipes = {}
 
-greeting()
+greet_user()
 
 prompt = f"""\n---------------------------------------------------------
 Enter the recipe in this order:
