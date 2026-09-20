@@ -1,6 +1,8 @@
+# ---IMPORTS---
 import textwrap
 import difflib
 
+# ---FUNCTIONS-&-VARIABLES---
 def greeting():
     print("\n$$$ WELCOME TO THE AIR FRYER RECIPE APP $$$")
 
@@ -85,12 +87,8 @@ def search_by_name() -> None:
     # Store the input in search_query variable
     search_query = input("\n>>> Enter the recipe name to search (allows typos)\n>>> ").strip().lower()
 
-    # matches = close matches to search_query(input) searching in the names(keys)
-    # of recipes cutoff (max tolerance for typos = 0, no tolerance for typos 1)
-    matches = difflib.get_close_matches(search_query, recipes.keys(), cutoff=0.6)
-
     # If there are matches
-    if matches:
+    if matches := difflib.get_close_matches(search_query, recipes.keys(), cutoff=0.6):
         print("\n??? Did you mean:\n=================")
         # Display close formatted matches
         for match in matches:
