@@ -3,9 +3,6 @@ import difflib
 
 recipes = {}
 
-def greet_user():
-    print("\n$$$ WELCOME TO THE AIR FRYER RECIPE APP $$$")
-
 def nothing_to_add() -> None:
     """Func that displays communicate 'Nothing to add'"""
     print("\n!!! Nothing to add !!!")
