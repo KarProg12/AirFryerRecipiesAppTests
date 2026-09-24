@@ -29,9 +29,7 @@ while True:
         case ['']:
             app_funcs.nothing_to_add()
 
-
         # ---COMMANDS---
-
         case ['/end'] | ['/exit']:
             print('\n---------------------\n>> Escaped program <<\n---------------------')
             print(f"\n@| You've added {len(app_funcs.recipes)} recipe/s |@")

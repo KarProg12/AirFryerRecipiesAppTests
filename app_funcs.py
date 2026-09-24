@@ -84,7 +84,7 @@ def search_by_ingredient() -> None:
         no_recipes()
         return
 
-    search_query = input("\n>>> Enter the recipe's ingredient you want to search (allows typos)\n>>> ").strip().lower()
+    search_query = input("\n>>> Enter the recipe's ingredient/s you want to search (allows typos)\n>>> ").strip().lower()
 
     # List of found accurate matches
     matches = []
