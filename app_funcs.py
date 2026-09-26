@@ -20,8 +20,7 @@ def print_user_manual() -> None:
     user_manual = """
 > Type ['/end'] or ['/exit'] to escape the program.
 > Type ['/shall'] to display all recipes in table.
-> Type ['/nameSearch'] to search the recipe by its name 
-> Type ['/ingrSearch'] to search in the recipes by ingredients
+> Type ['/search'] to search in recipes names or ingredients. 
 > Type ['/del'], ['/delete'] or ['/rm'] 
     to enter the deleting by name mode."""
     print(user_manual)
