@@ -38,10 +38,8 @@ while True:
             app_funcs.print_user_manual()
         case ['/shall']:
             app_funcs.print_all_recipes_in_table()
-        case ['/namesearch']:
-            app_funcs.search_by_name()
-        case ['/ingrsearch']:
-            app_funcs.search_by_ingredient()
+        case ['/search']:
+            app_funcs.search_recipe()
         case ['/del'] | ['/rm']:
             app_funcs.del_recipe()
 

@@ -18,12 +18,12 @@ def print_format_error() -> None:
 def print_user_manual() -> None:
     """Func for displaying user manual"""
     user_manual = """
-    > Type ['/end'] or ['/exit'] to escape the program.
-    > Type ['/shall'] to display all recipes in table.
-    > Type ['/nameSearch'] to search the recipe by its name 
-    > Type ['/ingrSearch'] to search in the recipes by ingredients
-    > Type ['/del'], ['/delete'] or ['/rm'] 
-        to enter the deleting by name mode."""
+> Type ['/end'] or ['/exit'] to escape the program.
+> Type ['/shall'] to display all recipes in table.
+> Type ['/nameSearch'] to search the recipe by its name 
+> Type ['/ingrSearch'] to search in the recipes by ingredients
+> Type ['/del'], ['/delete'] or ['/rm'] 
+    to enter the deleting by name mode."""
     print(user_manual)
 
 def add_recipe(name, content) -> None:
@@ -60,26 +60,9 @@ def del_recipe() -> None:
         else:
             print("\n>> Removal cancelled <<")
 
-def search_by_name() -> None:
-    """Searches precisely recipe by its name"""
-    # Check if there's no recipes
-    if not recipes:
-        no_recipes()
-        return
-
-    # Store the input in search_query variable
-    search_query = input("\n>>> Enter the recipe name to search (allows typos)\n>>> ").strip().lower()
-
-    # If there are matches
-    if matches := difflib.get_close_matches(search_query, recipes.keys(), cutoff=0.6):
-        print("\n??? Did you mean:\n=================")
-        # Display close formatted matches
-        for match in matches:
-            print(f"\n> {match.capitalize()}:\n\t{recipes[match]}")
-    else:
-        print(f"\n!!! Error 404: Not found: {search_query} !!!")
-
-def search_by_ingredient() -> None:
+def search_recipe() -> None:
+    """Universal recipe browser.
+    Searches in recipes names or content"""
     if not recipes:
         no_recipes()
         return
@@ -91,9 +74,14 @@ def search_by_ingredient() -> None:
 
     # Iteration by every recipe in recipes
     for name, content in recipes.items():
-        # If there is accurate input or difflib has found close matches
-        if search_query in content.lower() or difflib.get_close_matches(search_query, content.lower().split(), cutoff=0.6):
-            # Add recipe name and content to matches list as a tuple
+        content_lower = content.lower()
+
+        # Check and match NAME of recipe
+        name_match = (search_query in name) or  bool(difflib.get_close_matches(search_query, [name], cutoff=0.6))
+        # Check and match CONTENT of recipe
+        content_match = (search_query in content_lower) or bool(difflib.get_close_matches(search_query, content_lower.split(), cutoff=0.6))
+
+        if name_match or content_match:
             matches.append((name, content))
 
     if matches:
